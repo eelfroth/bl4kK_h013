@@ -1,11 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////
 
-int orb_iterator;
+int orb_iterator = 32;
 
 Orb createOrb(float radius, float x, float y) {
   Orb orb = new Orb(radius, x, y);
   orb.identificator = char(++orb_iterator);
-     if(VERBOSE) println("CREATE_ORB: \t"+orb.identificator+" \t"+x+","+y);
+     if(VERBOSE) log.add_line("CREATE_ORB:\t\t\t"+orb.identificator+" \t"+x+","+y);
      
   return orb;
 }
@@ -31,14 +31,15 @@ class Orb {
     c_symbol = 0;
   }
   
-  void update() {
-    
+  void update(float delta) {
+    orientation += rotation * delta;
   }
   
   void display() {
     buffer.pushMatrix();
     buffer.translate(location.x, location.y);
     buffer.rotate(orientation);
+    buffer.textFont(font_orb);
     {
       buffer.stroke(c_stroke);
       buffer.fill(c_fill);
