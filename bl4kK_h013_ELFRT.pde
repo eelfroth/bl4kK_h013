@@ -1,8 +1,12 @@
+import java.awt.event.KeyEvent; 
+
+////////////////////////////////////////////////////////////////////////////
+
 //INFO//
 final String AUTHOR = "EELFROTH";
 final String GAME_TITLE = "bl4kK_h013";
 final float GAME_VERSION = 0.1;
-final String CREATION_DATE = "Prickle Prickle, the 41st day of Discord in the YOLD 3180";
+final String CREATION_DATE = "PRICKLE_PRICKLE\t41ST_OF_DISCORD\tYOLD_3180";
 
 
 //PREFERENCES//
@@ -14,6 +18,8 @@ final int FRAME_RATE = 60;
 final int TEXTURE_SAMPLING = 2;
 final boolean VERBOSE = true;
 
+////////////////////////////////////////////////////////////////////////////
+
 //SKETCH_VARIABLES//
 PGraphics buffer;
 PImage buffer_image;
@@ -21,19 +27,23 @@ color buffer_tint;
 float delta;
 int last_millis;
 
-/////////////////////////
 void setup() {
 //STATE_YOUR_NAME_AND_OCCUPATION//
-  println("--- " + GAME_TITLE + " ---\t" + GAME_VERSION + "\t by " + AUTHOR);
-  println(CREATION_DATE + "\n");
+  println("-----------------------------------------------");
+  println("| "+GAME_TITLE + " \t" + GAME_VERSION + "\t" + AUTHOR + "\t\t |");
+  println("| "+CREATION_DATE+" |");
+  println("-----------------------------------------------\n");
+  
+  int start_millis = millis();
+          if(VERBOSE) println("\nSTART_SETUP_AT: \t" + millis() + " ms");
       
 //SET_UP_FRAME//
    size(FRAME_WIDTH, FRAME_HEIGHT, JAVA2D);
           if(VERBOSE) println("FRAME_SIZE: \t" + FRAME_WIDTH + "x" + FRAME_HEIGHT);
   
 //SET_UP_BUFFER//
-  //((PGraphicsOpenGL)g).textureSampling(TEXTURE_SAMPLING);
-          if(VERBOSE) println("TEXTURE_SAMPLING: \t" + TEXTURE_SAMPLING);
+  //((PGraphicsOpenGL)g).textureSampling(TEXTURE_SAMPLING); //only in P2D
+  //        if(VERBOSE) println("TEXTURE_SAMPLING: \t" + TEXTURE_SAMPLING);
           
   buffer = createGraphics(BUFFER_WIDTH, BUFFER_HEIGHT, JAVA2D);
   buffer_image = createImage(BUFFER_WIDTH, BUFFER_HEIGHT, RGB);
@@ -49,10 +59,34 @@ void setup() {
 //CONTROL_THE_FLOW_OF_TIME//
   frameRate(FRAME_RATE);
           if(VERBOSE) println("FRAME_RATE: \t" + FRAME_RATE);
+          
+//INITIALIZE_GAME_ELEMENTS//
+  initialize(millis());
   
   last_millis = millis();
-          if(VERBOSE) println("SETUP_DONE_AT: \t" + millis() + "ms");
+          if(VERBOSE) println("SETUP_DONE_AT: \t" + millis() + " ms");
+          if(VERBOSE) println("SETUP_RUNTIME: \t" + (millis()-start_millis) + " ms\n");
 }
+
+////////////////////////////////////////////////////////////////////////////
+
+//GAME_VARIABLES//
+ArrayList<Orb> orbs;
+
+void initialize(int start_millis) {
+          if(VERBOSE) println("\nSTART_INITIALIZE_AT: \t" + start_millis + " ms");
+  
+  orbs = new ArrayList<Orb>();
+          if(VERBOSE) println("INITIALIZE_ARRAY_LIST: \tORBS");
+  
+  orbs.add(createOrb(23, BUFFER_WIDTH/2, BUFFER_HEIGHT/2));
+  
+          if(VERBOSE) println("INITIALIZE_DONE_AT: \t" + millis() + " ms");
+          if(VERBOSE) println("INITIALIZE_RUNTIME: \t" + (millis()-start_millis) + " ms\n");
+}
+
+
+////////////////////////////////////////////////////////////////////////////
 
 void draw() {
 //GET_DELTA_TIME//
@@ -64,19 +98,14 @@ void draw() {
   {
     buffer.background(0);
     
-    buffer.stroke(255);
-    buffer.fill(255);
-    
-    buffer.ellipse(BUFFER_WIDTH/2, BUFFER_HEIGHT/2, 32, 32);
-    
-    buffer.fill(0);
-    buffer.textAlign(CENTER);
-    buffer.textSize(23);
-    buffer.text("※", BUFFER_WIDTH/2, BUFFER_HEIGHT/2 + 8);
+    for(Orb orb : orbs) {
+      orb.update();
+      orb.display();
+    }
   }
   buffer.endDraw();
   
-//WORKAROUND_FOR_CRISP_PIXELS//
+//P2D_WORKAROUND_FOR_CRISP_PIXELS// --- //WHICH_DOES_NOT_WORK_ANYMORE...//
   buffer.loadPixels();
   buffer_image.loadPixels();
   buffer_image.pixels = buffer.pixels;
@@ -92,4 +121,14 @@ void draw() {
   rect(0, 0, 128, 32);
   fill(230, 100, 255);
   text("fR: " + frameRate + " \nΔ : " + delta, 6, 14);
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+void keyPressed() {
+  if(key == CODED) {
+    if(keyCode == KeyEvent.VK_F12) {
+      initialize(millis());
+    }
+  } 
 }
