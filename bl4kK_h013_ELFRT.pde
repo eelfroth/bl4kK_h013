@@ -1,4 +1,5 @@
 import java.awt.event.KeyEvent; 
+import java.awt.Font;
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -28,9 +29,8 @@ int last_millis;
 MLog log;
 PFont font_log, font_orb; 
 
-void setup() {
+void setup() {  
   size(FRAME_WIDTH, FRAME_HEIGHT, JAVA2D);
-  
 //MAKE_LOG//
   log = new MLog(6, 36);
   
@@ -45,6 +45,7 @@ void setup() {
           if(VERBOSE) log.add_line("SETUP_START_AT: " + millis() + " ms");
       
 //SET_UP_FRAME//
+  
           if(VERBOSE) log.add_line("FRAME_SIZE: \t" + FRAME_WIDTH + "x" + FRAME_HEIGHT);
   
 //SET_UP_BUFFER//
@@ -67,16 +68,21 @@ void setup() {
           if(VERBOSE) log.add_line("FRAME_RATE: \t" + FRAME_RATE);
           
 //LOAD_FONT//
-          if(VERBOSE) log.add_line("LOAD_FONT: \t\tDejaVuSansMono-14.vlw");
+  String FONT_TYPE = "DejaVuSansMono";
+  //String FONT_TYPE = "UbuntuMono-Regular";
+  //String FONT_TYPE = "Code2002";
+
+          if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-12.vlw");
   int mil = millis();
-  font_log = loadFont("DejaVuSansMono-14.vlw");
+  font_log = loadFont(FONT_TYPE+"-12.vlw");
   textFont(font_log);
+  textSize(12);
           if(VERBOSE) log.add_line("SUCCESS_AFTER: \t" + (millis() - mil) + " ms");
           
 //LOAD_SECOND_FONT//
-          if(VERBOSE) log.add_line("LOAD_FONT: \t\tDejaVuSansMono-48.vlw");
+          if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-48.vlw");
   mil = millis();
-  font_orb = loadFont("DejaVuSansMono-48.vlw");
+  font_orb = loadFont(FONT_TYPE+"-48.vlw");
           if(VERBOSE) log.add_line("SUCCESS_AFTER: \t" + (millis() - mil) + " ms");
   
   
@@ -85,6 +91,7 @@ void setup() {
           if(VERBOSE) log.add_line();
           
   //INITIALIZE_GAME_ELEMENTS//
+  dif = (FRAME_WIDTH*FRAME_HEIGHT) - (BUFFER_WIDTH*BUFFER_HEIGHT);
   initialize(millis());
 }
 
@@ -111,16 +118,36 @@ void initialize(int start_millis) {
 
 ////////////////////////////////////////////////////////////////////////////
 
+int offset = 2;
+int dif;
+
 void draw() {
 //GET_DELTA_TIME//
   delta = float(millis() - last_millis)/1000 * FRAME_RATE;
   last_millis = millis();
   
+  offset += frameRate;
+  //if (offset > dif) offset -= dif;
+  offset %= dif;
+  
+  buffer.loadPixels();
+  loadPixels();
+  //int dif = pixels.length - buffer.pixels.length;
+  //int offset = (frameCount * frameCount) % dif;
+  for(int i=offset%2; i<buffer.pixels.length; i+=2) {
+    buffer.pixels[i] = pixels[i + offset];
+  }
+  buffer.updatePixels();
+  //updatePixels();
+  
 //DRAW_GAME_TO_BUFFER//
   buffer.beginDraw();
   {
-    //buffer.noSmooth();
-    buffer.background(0);
+    buffer.noSmooth();
+    //buffer.background(0):
+    buffer.fill(0, 128);
+    buffer.noStroke();
+    buffer.rect(0, 0, buffer.width, buffer.height);
     
     for(Orb orb : orbs) {
       orb.update(delta);
@@ -145,10 +172,19 @@ void draw() {
   rect(4, 0, 128, 36);
   fill(230, 100, 255);
   text("fR: " + frameRate + " \nΔt: " + delta, 10, 14);
+  //text(hex(dif) + "\n" + hex(offset), 10, 14);
   
 //DISPLAY_LOG//
   log.update(delta);
   log.display();
+  
+  //loadPixels();
+  //for(int i=0; i<buffer.pixels.length; i++) {
+//  pixels[offset] = color(0, 255, 255);
+  //}
+  //updatePixels();
+  //stroke(color(random(255), random(255), random(255), random(255)));
+  //line(offset%width, offset/width, (offset+buffer.pixels.length)%width, (offset+buffer.pixels.length)/width);
 }
 
 ////////////////////////////////////////////////////////////////////////////

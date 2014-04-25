@@ -1,10 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////
 
-int orb_iterator = 32;
+int orb_iterator = 0;
 
 Orb createOrb(float radius, float x, float y) {
   Orb orb = new Orb(radius, x, y);
-  orb.identificator = char(++orb_iterator);
+  while(!font_orb.canDisplay(orb.identificator)) {
+    orb.identificator = char(++orb_iterator);
+  }
      if(VERBOSE) log.add_line("CREATE_ORB:\t\t\t"+orb.identificator+" \t"+x+","+y);
      
   return orb;
@@ -26,9 +28,9 @@ class Orb {
     orientation = random(TWO_PI);
     rotation = 0.05;
     identificator = '※';
-    c_fill = color(23, 100, 200);
+    c_fill = color(0, 0);
     c_stroke = color(23, 100, 200);
-    c_symbol = 0;
+    c_symbol = color(23, 100, 200);
   }
   
   void update(float delta) {
@@ -42,7 +44,8 @@ class Orb {
     buffer.textFont(font_orb);
     {
       buffer.stroke(c_stroke);
-      buffer.fill(c_fill);
+      //buffer.fill(c_fill);
+      buffer.noFill();
       
       buffer.ellipse(0, 0, radius*2, radius*2);
       
@@ -50,6 +53,7 @@ class Orb {
       buffer.textAlign(CENTER);
       buffer.textSize(radius*1.5);
       buffer.text(identificator, 0, 0 + radius/2);
+      
     }
     buffer.popMatrix();
   }
