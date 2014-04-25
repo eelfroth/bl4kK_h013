@@ -15,7 +15,7 @@ class MLog {
     }
     
     font_size = 14;
-    c = color(230, 100, 255);
+    c = color(23+128, 100, 200);
   }
   
   void add_line(String line) {

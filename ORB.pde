@@ -1,12 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////
 
-int orb_iterator = 0;
+int orb_iterator = 32;
 
 Orb createOrb(float radius, float x, float y) {
   Orb orb = new Orb(radius, x, y);
-  while(!font_orb.canDisplay(orb.identificator)) {
+  
+//NEXT_GLYPH//
+  orb.identificator = char(++orb_iterator);
+  
+//ONLY_USE_GLYPHS_THAT_ARE_IN_THE_FONT//
+  while(font_orb.getGlyph(orb.identificator) == null) {
     orb.identificator = char(++orb_iterator);
   }
+  
      if(VERBOSE) log.add_line("CREATE_ORB:\t\t\t"+orb.identificator+" \t"+x+","+y);
      
   return orb;
