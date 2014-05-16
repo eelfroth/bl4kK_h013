@@ -44,6 +44,7 @@ class MLog {
   void update(float delta) {
     if(line_counter < lines.size()) { 
       line_counter += float(display_lines)/50 * delta;
+      line_counter = min(line_counter, lines.size());
     }
   }
   
