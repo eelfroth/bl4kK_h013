@@ -10,8 +10,8 @@ final float GAME_VERSION = 0.2;
 final String CREATION_DATE = "SETTING_ORANGE\t62TH_OF_DISCORD\tYOLD_3180";
 
 //PREFERENCES//
-final int BUFFER_WIDTH = 96;
-final int BUFFER_HEIGHT = 96;
+final int BUFFER_WIDTH = 320;
+final int BUFFER_HEIGHT = 320;
 final int FRAME_WIDTH = 640;
 final int FRAME_HEIGHT = 480;
 final int FRAME_RATE = 60;
@@ -78,16 +78,16 @@ void setup() {
   int mil = millis();
   font_log = loadFont(FONT_TYPE+"-14.vlw");
   textFont(font_log);
-  textSize(14);
+  textSize(max(ceil(float(FRAME_HEIGHT)/36), 14));
           if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
-          if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
+          //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
           
 //LOAD_SECOND_FONT//
           if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-48.vlw");
   mil = millis();
   font_orb = loadFont(FONT_TYPE+"-48.vlw");
           if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
-          if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
+          //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
   
   
           if(VERBOSE) log.add_line("SETUP_DONE_AT: \t" + millis() + " ms");
@@ -138,7 +138,7 @@ void draw() {
   loadPixels();
   //int dif = pixels.length - buffer.pixels.length;
   //int offset = (frameCount * frameCount) % dif;
-  for(int i=offset%2; i<buffer.pixels.length; i+=2) {
+  for(int i=offset%(5); i<buffer.pixels.length; i+=(5)) {
     buffer.pixels[i] = pixels[i + offset];
   }
   buffer.updatePixels();
@@ -149,7 +149,7 @@ void draw() {
   {
     buffer.noSmooth();
     //buffer.background(0):
-    buffer.fill(0, 128);
+    buffer.fill(0, 24 * delta);
     buffer.noStroke();
     buffer.rect(0, 0, buffer.width, buffer.height);
     

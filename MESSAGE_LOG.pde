@@ -58,10 +58,10 @@ class MLog {
     String output = "";
     String line;
     if(lines.size() > 0) {
-      for(int i = min(display_lines, floor(line_counter))-1; i >= 0 ; i--) {
-        line = lines.get(floor(line_counter)- i);
-        if (line == null) continue;
-        output += line + "\n";        
+      for(int i = min(display_lines, floor(line_counter)); i >= 0 ; i--) {
+        if(floor(line_counter) < display_lines) continue;
+        line = lines.get(floor(line_counter-i));
+        if (line != null) output += line + "\n";        
       }
     }
     
