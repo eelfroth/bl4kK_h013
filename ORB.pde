@@ -51,6 +51,7 @@ class Orb {
     {
       buffer.stroke(c_stroke);
       //buffer.fill(c_fill);
+      buffer.strokeWeight(1);
       buffer.noFill();
       
       buffer.ellipse(0, 0, radius*2, radius*2);

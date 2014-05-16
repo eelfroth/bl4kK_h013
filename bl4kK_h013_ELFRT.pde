@@ -10,12 +10,11 @@ final float GAME_VERSION = 0.2;
 final String CREATION_DATE = "SETTING_ORANGE\t62TH_OF_DISCORD\tYOLD_3180";
 
 //PREFERENCES//
-final int BUFFER_WIDTH = 320;
-final int BUFFER_HEIGHT = 320;
-final int FRAME_WIDTH = 640;
-final int FRAME_HEIGHT = 480;
+final int BUFFER_WIDTH = 96;
+final int BUFFER_HEIGHT = 96;
+final int FRAME_WIDTH = 1100;
+final int FRAME_HEIGHT = 760;
 final int FRAME_RATE = 60;
-final int TEXTURE_SAMPLING = 2;
 final boolean VERBOSE = true;
 final int BUFFER_OPACITY = 200;
 
@@ -23,21 +22,23 @@ final int BUFFER_OPACITY = 200;
 
 //SKETCH_VARIABLES//
 PGraphics buffer;
-PImage buffer_image;
 color buffer_tint;
 float delta;
 int last_millis;
 MLog log;
 PFont font_log, font_orb; 
+float text_size;
+PShader scalingShader;
 
 void setup() { 
 //SET_UP_FRAME// 
-  size(FRAME_WIDTH, FRAME_HEIGHT, JAVA2D);
+  size(FRAME_WIDTH, FRAME_HEIGHT, P2D);
   noSmooth();
   colorMode(HSB);
+  text_size = max(ceil(float(FRAME_HEIGHT)/36), 14);
   
 //MAKE_LOG//
-  log = new MLog(6, 36);
+  log = new MLog(6, text_size*3);
   
 //STATE_YOUR_NAME_AND_OCCUPATION//
   log.add_line("-----------------------------------------------");
@@ -51,11 +52,7 @@ void setup() {
           if(VERBOSE) log.add_line("FRAME_SIZE: \t" + FRAME_WIDTH + "x" + FRAME_HEIGHT);
 
 //SET_UP_BUFFER//
-  //((PGraphicsOpenGL)g).textureSampling(TEXTURE_SAMPLING); //only in P2D
-  //        if(VERBOSE) log.add_line("TEXTURE_SAMPLING: \t" + TEXTURE_SAMPLING);
-          
-  buffer = createGraphics(BUFFER_WIDTH, BUFFER_HEIGHT, JAVA2D);
-  buffer_image = createImage(BUFFER_WIDTH, BUFFER_HEIGHT, RGB);
+  buffer = createGraphics(BUFFER_WIDTH, BUFFER_HEIGHT, P2D);
           if(VERBOSE) log.add_line("BUFFER_SIZE: \t" + BUFFER_WIDTH + "x" + BUFFER_HEIGHT);
           
 //DRAWING_PROPERTIES//
@@ -78,7 +75,7 @@ void setup() {
   int mil = millis();
   font_log = loadFont(FONT_TYPE+"-14.vlw");
   textFont(font_log);
-  textSize(max(ceil(float(FRAME_HEIGHT)/36), 14));
+  textSize(text_size);
           if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
           //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
           
@@ -88,13 +85,21 @@ void setup() {
   font_orb = loadFont(FONT_TYPE+"-48.vlw");
           if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
           //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
+
+          
+//LOAD_SHADERS//
+          if(VERBOSE) log.add_line("LOAD_SHADER: \tscaling.frag");
+  scalingShader = loadShader("scaling.frag");
+  scalingShader.set("pixelSize", buffer.width / 1.0F, buffer.height / 1.0F); //FRAME_WIDTH / BUFFER_WIDTH, FRAME_HEIGHT / BUFFER_HEIGHT);
+  scalingShader.set("pixelOffset", 0.5F / buffer.width, 0.5F / buffer.height);
   
-  
+//FINISH_SETUP//
           if(VERBOSE) log.add_line("SETUP_DONE_AT: \t" + millis() + " ms");
           if(VERBOSE) log.add_line("SETUP_RUNTIME: \t" + (millis()-start_millis) + " ms");
           if(VERBOSE) log.add_line();
+
           
-  //INITIALIZE_GAME_ELEMENTS//
+//INITIALIZE_GAME_ELEMENTS//
   dif = (FRAME_WIDTH*FRAME_HEIGHT) - (BUFFER_WIDTH*BUFFER_HEIGHT);
   initialize(millis());
 }
@@ -132,24 +137,15 @@ void draw() {
   
   offset += frameRate;
   //if (offset > dif) offset -= dif;
-  offset %= dif;
+  offset %= max(dif,1);
   
-  buffer.loadPixels();
-  loadPixels();
-  //int dif = pixels.length - buffer.pixels.length;
-  //int offset = (frameCount * frameCount) % dif;
-  for(int i=offset%(5); i<buffer.pixels.length; i+=(5)) {
-    buffer.pixels[i] = pixels[i + offset];
-  }
-  buffer.updatePixels();
-  //updatePixels();
+  
   
 //DRAW_GAME_TO_BUFFER//
   buffer.beginDraw();
   {
-    buffer.noSmooth();
-    //buffer.background(0):
-    buffer.fill(0, 24 * delta);
+    //buffer.noSmooth();
+    buffer.fill(0, 48 * delta);
     buffer.noStroke();
     buffer.rect(0, 0, buffer.width, buffer.height);
     
@@ -160,35 +156,24 @@ void draw() {
   }
   buffer.endDraw();
   
-//P2D_WORKAROUND_FOR_CRISP_PIXELS//
-  buffer.loadPixels();
-  buffer_image.loadPixels();
-  buffer_image.pixels = buffer.pixels;
-  buffer_image.updatePixels();
-  
 //DRAW_BUFFER_TO_FRAME//
   tint(buffer_tint);
-  image(buffer_image, 0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+  shader(scalingShader);
+  image(buffer, 0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+  resetShader();
   
 //SHOW_ME_THE_RATES//
   fill(0);
   stroke(color(23, 100, 200));
-  rect(4, 0, 128, 36);
+  rect(4, 0, FRAME_WIDTH/4, text_size * 2.64);
   fill(color(23, 100, 200));
-  text("fR: " + frameRate + " \n∆t: " + delta, 10, 14);
+  text("fR: " + frameRate + " \n∆t: " + delta, 10, max(ceil(float(FRAME_HEIGHT)/36), 14));
   //text(hex(dif) + "\n" + hex(offset), 10, 14);
   
 //DISPLAY_LOG//
   log.update(delta);
   log.display();
   
-  //loadPixels();
-  //for(int i=0; i<buffer.pixels.length; i++) {
-//  pixels[offset] = color(0, 255, 255);
-  //}
-  //updatePixels();
-  //stroke(color(random(255), random(255), random(255), random(255)));
-  //line(offset%width, offset/width, (offset+buffer.pixels.length)%width, (offset+buffer.pixels.length)/width);
 }
 
 ////////////////////////////////////////////////////////////////////////////
