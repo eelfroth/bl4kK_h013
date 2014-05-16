@@ -4,10 +4,10 @@ import java.awt.Font;
 ////////////////////////////////////////////////////////////////////////////
 
 //INFO//
-final String AUTHOR = "EELFROTH";
+final String AUTHOR = "BEN_SIRONKO & EELFROTH";
 final String GAME_TITLE = "bl4kK_h013";
-final float GAME_VERSION = 0.1;
-final String CREATION_DATE = "PRICKLE_PRICKLE\t41ST_OF_DISCORD\tYOLD_3180";
+final float GAME_VERSION = 0.2;
+final String CREATION_DATE = "SETTING_ORANGE\t62TH_OF_DISCORD\tYOLD_3180";
 
 //PREFERENCES//
 final int BUFFER_WIDTH = 96;
@@ -17,6 +17,7 @@ final int FRAME_HEIGHT = 480;
 final int FRAME_RATE = 60;
 final int TEXTURE_SAMPLING = 2;
 final boolean VERBOSE = true;
+final int BUFFER_OPACITY = 200;
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -29,25 +30,26 @@ int last_millis;
 MLog log;
 PFont font_log, font_orb; 
 
-void setup() {  
+void setup() { 
+//SET_UP_FRAME// 
   size(FRAME_WIDTH, FRAME_HEIGHT, JAVA2D);
+  noSmooth();
+  colorMode(HSB);
+  
 //MAKE_LOG//
   log = new MLog(6, 36);
   
 //STATE_YOUR_NAME_AND_OCCUPATION//
   log.add_line("-----------------------------------------------");
-  log.add_line("| "+GAME_TITLE + " \t" + GAME_VERSION + " \t" + AUTHOR + "\t\t\t  |");
+  log.add_line("| "+GAME_TITLE + " \t" + GAME_VERSION + " \t" + AUTHOR + "|");
   log.add_line("| "+CREATION_DATE+" |");
   log.add_line("-----------------------------------------------");
   log.add_line();
   
   int start_millis = millis();
           if(VERBOSE) log.add_line("SETUP_START_AT: " + millis() + " ms");
-      
-//SET_UP_FRAME//
-  
           if(VERBOSE) log.add_line("FRAME_SIZE: \t" + FRAME_WIDTH + "x" + FRAME_HEIGHT);
-  
+
 //SET_UP_BUFFER//
   //((PGraphicsOpenGL)g).textureSampling(TEXTURE_SAMPLING); //only in P2D
   //        if(VERBOSE) log.add_line("TEXTURE_SAMPLING: \t" + TEXTURE_SAMPLING);
@@ -57,11 +59,11 @@ void setup() {
           if(VERBOSE) log.add_line("BUFFER_SIZE: \t" + BUFFER_WIDTH + "x" + BUFFER_HEIGHT);
           
 //DRAWING_PROPERTIES//
-  noSmooth();
-  colorMode(HSB);
   //buffer.noSmooth();
   buffer.colorMode(HSB);
-  buffer_tint = color(255, 64);
+          if(VERBOSE) log.add_line("COLOR_MODE: \tHSB, \t255");
+  buffer_tint = color(255, BUFFER_OPACITY);
+          if(VERBOSE) log.add_line("BUFFER_OPACITY:\t" + BUFFER_OPACITY);
   
 //CONTROL_THE_FLOW_OF_TIME//
   frameRate(60);
@@ -72,18 +74,20 @@ void setup() {
   //String FONT_TYPE = "UbuntuMono-Regular";
   //String FONT_TYPE = "Code2002";
 
-          if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-12.vlw");
+          if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-14.vlw");
   int mil = millis();
-  font_log = loadFont(FONT_TYPE+"-12.vlw");
+  font_log = loadFont(FONT_TYPE+"-14.vlw");
   textFont(font_log);
-  textSize(12);
-          if(VERBOSE) log.add_line("SUCCESS_AFTER: \t" + (millis() - mil) + " ms");
+  textSize(14);
+          if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
+          if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
           
 //LOAD_SECOND_FONT//
           if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-48.vlw");
   mil = millis();
   font_orb = loadFont(FONT_TYPE+"-48.vlw");
-          if(VERBOSE) log.add_line("SUCCESS_AFTER: \t" + (millis() - mil) + " ms");
+          if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
+          if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
   
   
           if(VERBOSE) log.add_line("SETUP_DONE_AT: \t" + millis() + " ms");
@@ -168,10 +172,10 @@ void draw() {
   
 //SHOW_ME_THE_RATES//
   fill(0);
-  stroke(230, 100, 255);
+  stroke(color(23, 100, 200));
   rect(4, 0, 128, 36);
-  fill(230, 100, 255);
-  text("fR: " + frameRate + " \nΔt: " + delta, 10, 14);
+  fill(color(23, 100, 200));
+  text("fR: " + frameRate + " \n∆t: " + delta, 10, 14);
   //text(hex(dif) + "\n" + hex(offset), 10, 14);
   
 //DISPLAY_LOG//
@@ -194,5 +198,24 @@ void keyPressed() {
     if(keyCode == KeyEvent.VK_F12) {
       initialize(millis());
     }
+    if(keyCode == KeyEvent.VK_F11) {
+      setup();
+    }
   } 
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+
+int glyphs(PFont font) {
+  int a = 0;
+  int i = 0;
+  while(i>a) {
+    while(font.getGlyph(i) == null) {
+      i++;
+    }
+    a++;
+    //if(i <= 0) break;
+  }
+  return a;
 }

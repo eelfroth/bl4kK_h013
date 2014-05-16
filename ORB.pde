@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
-int orb_iterator = 32;
+int orb_iterator = 32325;
 
 Orb createOrb(float radius, float x, float y) {
   Orb orb = new Orb(radius, x, y);
@@ -13,7 +13,7 @@ Orb createOrb(float radius, float x, float y) {
     orb.identificator = char(++orb_iterator);
   }
   
-     if(VERBOSE) log.add_line("CREATE_ORB:\t\t\t"+orb.identificator+" \t"+x+","+y);
+     if(VERBOSE) log.add_line("CREATE_ORB:\t\t\t\t"+int(orb.identificator));
      
   return orb;
 }
