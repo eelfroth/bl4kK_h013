@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
-int orb_iterator = 32325;
+int orb_iterator = 0;
 
 Orb createOrb(float radius, float x, float y) {
   Orb orb = new Orb(radius, x, y);
@@ -31,7 +31,7 @@ class Orb {
     velocity = new PVector();
     accelleration = new PVector();
     this.radius = radius;
-    orientation = random(TWO_PI);
+    orientation = 0;//random(TWO_PI);
     rotation = 0.05;
     identificator = '※';
     c_fill = color(0, 0);

@@ -6,12 +6,12 @@ import java.awt.Font;
 //INFO//
 final String AUTHOR = "BEN_SIRONKO & EELFROTH";
 final String GAME_TITLE = "bl4kK_h013";
-final float GAME_VERSION = 0.2;
-final String CREATION_DATE = "SETTING_ORANGE\t62TH_OF_DISCORD\tYOLD_3180";
+final float GAME_VERSION = 0.3;
+final String CREATION_DATE = "PRICKLE_PRICLE\t66TH_OF_DISCORD\tYOLD_3180";
 
 //PREFERENCES//
-final int BUFFER_WIDTH = 96;
-final int BUFFER_HEIGHT = 96;
+final int BUFFER_WIDTH = 320;
+final int BUFFER_HEIGHT = 320;
 final int FRAME_WIDTH = 1100;
 final int FRAME_HEIGHT = 760;
 final int FRAME_RATE = 60;
@@ -28,7 +28,7 @@ int last_millis;
 MLog log;
 PFont font_log, font_orb; 
 float text_size;
-PShader scalingShader;
+PShader scalingShader, whirlShader;
 
 void setup() { 
 //SET_UP_FRAME// 
@@ -80,18 +80,28 @@ void setup() {
           //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
           
 //LOAD_SECOND_FONT//
-          if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-48.vlw");
+          if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-28.vlw");
   mil = millis();
-  font_orb = loadFont(FONT_TYPE+"-48.vlw");
+  font_orb = loadFont(FONT_TYPE+"-28.vlw");
           if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
           //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
 
-          
+  
+  //font_orb = font_log;  
 //LOAD_SHADERS//
           if(VERBOSE) log.add_line("LOAD_SHADER: \tscaling.frag");
   scalingShader = loadShader("scaling.frag");
   scalingShader.set("pixelSize", buffer.width / 1.0F, buffer.height / 1.0F); //FRAME_WIDTH / BUFFER_WIDTH, FRAME_HEIGHT / BUFFER_HEIGHT);
   scalingShader.set("pixelOffset", 0.5F / buffer.width, 0.5F / buffer.height);
+            if(VERBOSE) log.add_line("LOAD_SHADER: \twhirl.frag, whirl.vert");
+  whirlShader = loadShader("whirl.frag");
+  whirlShader.set("resolution", float(buffer.width), float(buffer.height));
+  whirlShader.set("time", 0.0F);
+  scalingShader.set("rt_w", float(buffer.width));
+  scalingShader.set("rt_h", float(buffer.height));
+  scalingShader.set("radius", 100.0F);
+  scalingShader.set("angle", 0.5F);
+  scalingShader.set("center", 160.0F, 160.0F);
   
 //FINISH_SETUP//
           if(VERBOSE) log.add_line("SETUP_DONE_AT: \t" + millis() + " ms");
@@ -115,8 +125,17 @@ void initialize(int start_millis) {
   orbs = new ArrayList<Orb>();
           if(VERBOSE) log.add_line("NEW_ARRAY_LIST: \t\tORBS");
   
-  orbs.add(createOrb(23, BUFFER_WIDTH/2 + 16, BUFFER_HEIGHT/2));
-  
+  //orbs.add(createOrb(23, BUFFER_WIDTH/2, BUFFER_HEIGHT/2));
+  orbs.add(createOrb(random(23), BUFFER_WIDTH/2 -50 + random(100), BUFFER_HEIGHT/2  -100 + random(200)));
+  orbs.add(createOrb(random(23), BUFFER_WIDTH/2 -50 + random(100), BUFFER_HEIGHT/2  -100 + random(200)));
+  orbs.add(createOrb(random(23), BUFFER_WIDTH/2 -50 + random(100), BUFFER_HEIGHT/2  -100 + random(200)));
+  orbs.add(createOrb(random(23), BUFFER_WIDTH/2 -50 + random(100), BUFFER_HEIGHT/2  -100 + random(200)));
+  orbs.add(createOrb(random(23), BUFFER_WIDTH/2 -50 + random(100), BUFFER_HEIGHT/2  -100 + random(200)));
+  orbs.add(createOrb(random(42), BUFFER_WIDTH/2 -160 + random(320), BUFFER_HEIGHT/2  -100 + random(200)));
+  orbs.add(createOrb(random(42), BUFFER_WIDTH/2 -160 + random(320), BUFFER_HEIGHT/2  -100 + random(200)));
+  orbs.add(createOrb(random(42), BUFFER_WIDTH/2 -160 + random(320), BUFFER_HEIGHT/2  -100 + random(200)));
+  orbs.add(createOrb(random(42), BUFFER_WIDTH/2 -160 + random(320), BUFFER_HEIGHT/2  -100 + random(200)));
+
           if(VERBOSE) log.add_line("INITIALIZE_DONE_AT: \t" + millis() + " ms");
           if(VERBOSE) log.add_line("INITIALIZE_RUNTIME: \t" + (millis()-start_millis) + " ms");
           if(VERBOSE) log.add_line();
@@ -142,7 +161,9 @@ void draw() {
   
   
 //DRAW_GAME_TO_BUFFER//
+  //buffer.shader(whirlShader);
   buffer.beginDraw();
+  //buffer.shader(whirlShader);
   {
     //buffer.noSmooth();
     buffer.fill(0, 48 * delta);
@@ -153,15 +174,16 @@ void draw() {
       orb.update(delta);
       orb.display();
     }
+    //buffer.resetShader();
   }
   buffer.endDraw();
   
 //DRAW_BUFFER_TO_FRAME//
-  tint(buffer_tint);
   shader(scalingShader);
+  tint(buffer_tint);
   image(buffer, 0, 0, FRAME_WIDTH, FRAME_HEIGHT);
   resetShader();
-  
+ 
 //SHOW_ME_THE_RATES//
   fill(0);
   stroke(color(23, 100, 200));

@@ -42,9 +42,9 @@ class MLog {
   }
   
   void update(float delta) {
-    if(line_counter < lines.size()) { 
+    if(line_counter < lines.size()-1) { 
       line_counter += float(display_lines)/50 * delta;
-      line_counter = min(line_counter, lines.size());
+      if(line_counter > lines.size()) line_counter = lines.size()-1;
     }
   }
   
@@ -60,7 +60,7 @@ class MLog {
     String line;
     if(lines.size() > 0) {
       for(int i = min(display_lines, floor(line_counter)); i >= 0 ; i--) {
-        if(floor(line_counter) < display_lines) continue;
+        //if(floor(line_counter) < display_lines) break;
         line = lines.get(floor(line_counter-i));
         if (line != null) output += line + "\n";        
       }
