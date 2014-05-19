@@ -80,9 +80,10 @@ void setup() {
           //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
           
 //LOAD_SECOND_FONT//
-          if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-28.vlw");
+
+          if(VERBOSE) log.add_line("LOAD_FONT: \t\t"+FONT_TYPE+"-48.vlw");
   mil = millis();
-  font_orb = loadFont(FONT_TYPE+"-28.vlw");
+  font_orb = loadFont(FONT_TYPE+"-48.vlw");
           if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
           //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
 
@@ -134,7 +135,7 @@ void initialize(int start_millis) {
   orbs.add(createOrb(random(42), BUFFER_WIDTH/2 -160 + random(320), BUFFER_HEIGHT/2  -100 + random(200)));
   orbs.add(createOrb(random(42), BUFFER_WIDTH/2 -160 + random(320), BUFFER_HEIGHT/2  -100 + random(200)));
   orbs.add(createOrb(random(42), BUFFER_WIDTH/2 -160 + random(320), BUFFER_HEIGHT/2  -100 + random(200)));
-  orbs.add(createOrb(random(42), BUFFER_WIDTH/2 -160 + random(320), BUFFER_HEIGHT/2  -100 + random(200)));
+  orbs.add(createOrb(random(42), BUFFER_WIDTH/2 -160 + random(320), BUFFER_HEIGHT/2  -100 + random(200))); 
 
           if(VERBOSE) log.add_line("INITIALIZE_DONE_AT: \t" + millis() + " ms");
           if(VERBOSE) log.add_line("INITIALIZE_RUNTIME: \t" + (millis()-start_millis) + " ms");
