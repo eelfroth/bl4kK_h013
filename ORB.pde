@@ -31,10 +31,10 @@ class Orb {
     velocity = new PVector();
     accelleration = new PVector();
     this.radius = radius;
-    orientation = 0;//random(TWO_PI);
-    rotation = 0.05;
+    orientation = random(TWO_PI);
+    rotation = 0.005;
     identificator = '※';
-    c_fill = color(0, 0);
+    c_fill = color(0);
     c_stroke = color(23, 100, 200);
     c_symbol = color(23, 100, 200);
   }
@@ -50,9 +50,9 @@ class Orb {
     buffer.textFont(font_orb);
     {
       buffer.stroke(c_stroke);
-      //buffer.fill(c_fill);
+      buffer.fill(c_fill);
       buffer.strokeWeight(1);
-      buffer.noFill();
+      //buffer.noFill();
       
       buffer.ellipse(0, 0, radius*2, radius*2);
       

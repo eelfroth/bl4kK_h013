@@ -12,6 +12,7 @@ varying vec4 vertTexCoord;
 
 uniform float rt_w; 
 uniform float rt_h; 
+uniform float time;
 
 // Swirl effect parameters
 uniform float radius;// = 200.0;
@@ -25,10 +26,10 @@ vec2 swirl(vec2 uv) {
   float dist = length(tc);
   if (dist < radius) 
   {
-    float percent = (radius - dist) / radius;
-    float theta = percent * percent * angle * 8.0;
-    float s = sin(theta);
-    float c = cos(theta);
+    float percent = (radius-dist) / radius;
+    float theta = pow(percent, 16) * angle * 8.0;
+    float s = sin(theta + time);
+    float c = cos(theta + time);
     tc = vec2(dot(tc, vec2(c, -s)), dot(tc, vec2(s, c)));
   }
   tc += center;
@@ -37,6 +38,7 @@ vec2 swirl(vec2 uv) {
 
 void main() {
 	vec2 uv = swirl(vertTexCoord.st);
+//	vec2 uv = vertTexCoord.st;
     int si = int(uv.x * pixelSize.s);
     int sj = int(uv.y * pixelSize.t); 
     gl_FragColor = texture2D(texture, vec2(float(si) / pixelSize.s, float(sj) / pixelSize.t) + pixelOffset) * vertColor;
