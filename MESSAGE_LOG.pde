@@ -1,7 +1,7 @@
 class MLog {
   PVector location;
   StringList lines;
-  int display_lines = 25;
+  int display_lines;// = 25;
   float font_size;
   color c;
   float line_counter;
@@ -10,6 +10,7 @@ class MLog {
   MLog(float x, float y) {
     location = new PVector(x, y);
     lines = new StringList();
+    display_lines = floor(WINDOW_HEIGHT / text_size) - 14;
     for(int i=0; i<display_lines;i++) {
       lines.append("");
     }

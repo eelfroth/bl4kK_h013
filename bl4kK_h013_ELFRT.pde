@@ -13,9 +13,9 @@ final String CREATION_DATE = "BOOMTIME\t\t69TH_OF_DISCORD\t\tYOLD_3180";
 final int BUFFER_WIDTH = 320;
 final int BUFFER_HEIGHT = 320;
 final int WINDOW_WIDTH = 1100;
-final int WINDOW_HEIGHT = 760;
+final int WINDOW_HEIGHT = 730;
 final int GAME_SPEED = 60;
-final boolean VERBOSE = false;
+final boolean VERBOSE = true;
 final int BUFFER_OPACITY = 200;
 
 ////////////////////////////////////////////////////////////////////////////
@@ -43,10 +43,10 @@ void setup() {
   size(WINDOW_WIDTH, WINDOW_HEIGHT, P2D);
   noSmooth();
   colorMode(HSB);
-  text_size = max(ceil(float(WINDOW_HEIGHT)/36), 14);
+  text_size = 14;//max(ceil(float(WINDOW_HEIGHT)/36), 14);
   
 //MAKE_LOG//
-  log = new MLog(6, text_size*3);
+  log = new MLog(6, text_size*3.5);
   
 //STATE_YOUR_NAME_AND_DATE//
   log.add_line("-----------------------------------------------");
@@ -64,7 +64,7 @@ void setup() {
           if(VERBOSE) log.add_line("BUFFER_SIZE: \t" + BUFFER_WIDTH + "x" + BUFFER_HEIGHT);
           
 //DRAWING_PROPERTIES//
-  buffer.noSmooth();
+  //buffer.noSmooth();
   buffer.colorMode(HSB);
           if(VERBOSE) log.add_line("COLOR_MODE: \tHSB, \t255");
   buffer_tint = color(255, BUFFER_OPACITY);
@@ -85,7 +85,7 @@ void setup() {
   textFont(font_log);
   textSize(text_size);
           if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
-          //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
+          if(VERBOSE) log.add_line("GLYPHS_IN_FONT:\t" + font_log.getGlyphCount());
           
 //LOAD_SECOND_FONT//
 
@@ -93,7 +93,7 @@ void setup() {
   mil = millis();
   font_orb = loadFont(FONT_TYPE+"-48.vlw");
           if(VERBOSE) log.add_line("LOAD_TIME: \t\t" + (millis() - mil) + " ms");
-          //if(VERBOSE) log.add_line("GLYPHS_IN_FONT: \t" + glyphs(font_log));
+          if(VERBOSE) log.add_line("GLYPHS_IN_FONT:\t" + font_orb.getGlyphCount());
 
   
   //font_orb = font_log;  
@@ -111,6 +111,7 @@ void setup() {
   scalingShader.set("radius", swirlRadius);
   scalingShader.set("angle", swirlAngle);
   scalingShader.set("center", float(buffer.width)/2, float(buffer.height)/2);
+  scalingShader.set("time", 0.0F);
   
 //HACKY STUFF//
   dif = (WINDOW_WIDTH*WINDOW_HEIGHT) - (BUFFER_WIDTH*BUFFER_HEIGHT);
@@ -143,7 +144,7 @@ void draw() {
 //DRAW_BUFFER_TO_FRAME//
   scalingShader.set("radius", swirlRadius);
   scalingShader.set("angle", swirlAngle);
-  scalingShader.set("time", float(millis())/10000);
+  //scalingShader.set("time", float(millis())/10000);
   shader(scalingShader);
   {
     tint(buffer_tint);
@@ -154,9 +155,9 @@ void draw() {
 //SHOW_ME_THE_RATES//
   fill(0);
   stroke(color(23, 100, 200));
-  rect(4, 0, WINDOW_WIDTH/4, text_size * 2.64);
+  rect(text_size * 0.5, text_size * 0.5, text_size * 10, text_size * 2.64);
   fill(color(23, 100, 200));
-  text("fR: " + frameRate + " \n∆t: " + delta, 10, max(ceil(float(WINDOW_HEIGHT)/36), 14));
+  text("fR: " + frameRate + " \n∆t: " + delta, 10, max(ceil(float(WINDOW_HEIGHT)/36), text_size));
   //text(hex(dif) + "\n" + hex(offset), 10, 14);
   
 //DISPLAY_LOG//
@@ -180,16 +181,3 @@ void keyPressed() {
 
 
 ////////////////////////////////////////////////////////////////////////////
-
-int glyphs(PFont font) {
-  int a = 0;
-  int i = 0;
-  while(i>a) {
-    while(font.getGlyph(i) == null) {
-      i++;
-    }
-    a++;
-    //if(i <= 0) break;
-  }
-  return a;
-}

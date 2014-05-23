@@ -49,8 +49,8 @@ void update(float delta) {
     buffer.image(bg_image, 0, 0, buffer.width, buffer.height);
     //buffer.popMatrix();
     buffer.fill(0, 48 * delta);
-    //buffer.noStroke();
-    buffer.rect(0, 0, buffer.width, buffer.height);
+    buffer.noStroke();
+    //buffer.rect(0, 0, buffer.width, buffer.height);
     
     for(Orb orb : orbs) {
       orb.update(delta);
