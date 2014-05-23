@@ -27,7 +27,7 @@ vec2 swirl(vec2 uv) {
   if (dist < radius) 
   {
     float percent = (radius-dist) / radius;
-    float theta = pow(percent, 16) * angle * 8.0;
+    float theta = pow(percent, 16.0) * angle * 8.0;
     float s = sin(theta + time);
     float c = cos(theta + time);
     tc = vec2(dot(tc, vec2(c, -s)), dot(tc, vec2(s, c)));
