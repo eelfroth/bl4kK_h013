@@ -19,6 +19,10 @@ uniform float radius;// = 200.0;
 uniform float angle;// = 0.8;
 uniform vec2 center;
 
+float power(float a, int b) {
+	
+}
+
 vec2 swirl(vec2 uv) {
   vec2 texSize = vec2(rt_w, rt_h);
   vec2 tc = uv * texSize;
@@ -27,7 +31,7 @@ vec2 swirl(vec2 uv) {
   if (dist < radius) 
   {
     float percent = (radius-dist) / radius;
-    float theta = pow(percent, 16) * angle * 8.0;
+    float theta = pow(percent, 16.0) * angle * 8.0;
     float s = sin(theta + time);
     float c = cos(theta + time);
     tc = vec2(dot(tc, vec2(c, -s)), dot(tc, vec2(s, c)));
