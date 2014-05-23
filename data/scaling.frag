@@ -19,6 +19,10 @@ uniform float radius;// = 200.0;
 uniform float angle;// = 0.8;
 uniform vec2 center;
 
+float power(float a, int b) {
+	
+}
+
 vec2 swirl(vec2 uv) {
   vec2 texSize = vec2(rt_w, rt_h);
   vec2 tc = uv * texSize;
