@@ -71,7 +71,7 @@ void setup() {
           if(VERBOSE) log.add_line("BUFFER_OPACITY:\t" + BUFFER_OPACITY);
   
 //CONTROL_THE_FLOW_OF_TIME//
-  frameRate(60);
+  frameRate(9999);
           if(VERBOSE) log.add_line("GAME_SPEED: \t" + GAME_SPEED);
           
 //LOAD_FONT//
