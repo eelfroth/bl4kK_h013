@@ -10,8 +10,7 @@ uniform vec2 pixelOffset;
 varying vec4 vertColor;
 varying vec4 vertTexCoord;
 
-uniform float rt_w; 
-uniform float rt_h; 
+uniform vec2 texSize;
 uniform float time;
 
 // Swirl effect parameters
@@ -20,7 +19,6 @@ uniform float angle;// = 0.8;
 uniform vec2 center;
 
 vec2 swirl(vec2 uv) {
-  vec2 texSize = vec2(rt_w, rt_h);
   vec2 tc = uv * texSize;
   tc -= center;
   float dist = length(tc);

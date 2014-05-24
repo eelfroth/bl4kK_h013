@@ -32,15 +32,17 @@ class Orb {
     accelleration = new PVector();
     this.radius = radius;
     orientation = random(TWO_PI);
-    rotation = 0.005;
+    rotation = 0.05;
     identificator = '※';
-    c_fill = color(0);
+    c_fill = color(0, 160);
     c_stroke = color(23, 100, 200);
     c_symbol = color(23, 100, 200);
   }
   
   void update(float delta) {
     orientation += rotation * delta;
+    velocity.add(0.25 - random(0.5),0.25 - random(0.5), 0);
+    location.add(PVector.mult(velocity, delta));
   }
   
   void display() {

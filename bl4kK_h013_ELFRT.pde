@@ -1,21 +1,25 @@
+import org.gamecontrolplus.gui.*;
+import org.gamecontrolplus.*;
+import net.java.games.input.*;
+
 import java.awt.event.KeyEvent; 
-import java.awt.Font;
+//import java.awt.Font;
 
 ////////////////////////////////////////////////////////////////////////////
 
 //INFO//
 final String AUTHOR = "BEN_SIRONKO & EELFROTH";
 final String GAME_TITLE = "BLACK_HOLE";
-final float GAME_VERSION = 0.4;
-final String CREATION_DATE = "BOOMTIME\t\t69TH_OF_DISCORD\t\tYOLD_3180";
+final float GAME_VERSION = 0.5;
+final String CREATION_DATE = "PUNGENDAY\t\t70TH_OF_DISCORD\t\tYOLD_3180";
 
 //PREFERENCES//
 final int BUFFER_WIDTH = 320;
 final int BUFFER_HEIGHT = 320;
-final int WINDOW_WIDTH = 1100;
-final int WINDOW_HEIGHT = 730;
+final int WINDOW_WIDTH = 800;//1100;
+final int WINDOW_HEIGHT = 600;//730;
 final int GAME_SPEED = 60;
-final boolean VERBOSE = true;
+final boolean VERBOSE = false;
 final int BUFFER_OPACITY = 200;
 
 ////////////////////////////////////////////////////////////////////////////
@@ -28,13 +32,13 @@ int last_millis;
 MLog log;
 PFont font_log, font_orb; 
 float text_size;
-PShader scalingShader, whirlShader;
+PShader scalingShader, whirlShader, bgShader;
 PImage bg_image;
 
 //SHADER_VARIABLES//
 int offset = 2;
 int dif;
-float swirlRadius = 160.0;
+float swirlRadius = BUFFER_HEIGHT/2;
 final float swirlAngle = 1;
 
 
@@ -102,16 +106,19 @@ void setup() {
   scalingShader = loadShader("scaling.frag");
   scalingShader.set("pixelSize", buffer.width / 1.0F, buffer.height / 1.0F); //WINDOW_WIDTH / BUFFER_WIDTH, WINDOW_HEIGHT / BUFFER_HEIGHT);
   scalingShader.set("pixelOffset", 0.5F / buffer.width, 0.5F / buffer.height);
-            if(VERBOSE) log.add_line("LOAD_SHADER: \twhirl.frag, whirl.vert");
-  /*whirlShader = loadShader("whirl.frag");
+            /*if(VERBOSE) log.add_line("LOAD_SHADER: \twhirl.frag, whirl.vert");
+  whirlShader = loadShader("whirl.frag");
   whirlShader.set("resolution", float(buffer.width), float(buffer.height));
   whirlShader.set("time", 0.0F);*/
-  scalingShader.set("rt_w", float(buffer.width));
-  scalingShader.set("rt_h", float(buffer.height));
+  scalingShader.set("texSize", float(buffer.width), float(buffer.height));
   scalingShader.set("radius", swirlRadius);
   scalingShader.set("angle", swirlAngle);
   scalingShader.set("center", float(buffer.width)/2, float(buffer.height)/2);
   scalingShader.set("time", 0.0F);
+          if(VERBOSE) log.add_line("LOAD_SHADER: \tbg.frag");
+  bgShader = loadShader("bg.frag");
+  bgShader.set("texSize", float(buffer.width), float(buffer.height));
+  bgShader.set("time", 0.0F);
   
 //HACKY STUFF//
   dif = (WINDOW_WIDTH*WINDOW_HEIGHT) - (BUFFER_WIDTH*BUFFER_HEIGHT);
@@ -135,13 +142,10 @@ void draw() {
   delta = float(millis() - last_millis)/1000 * GAME_SPEED;
   last_millis = millis();
   
-  offset += delta * GAME_SPEED;
-  //if (offset > dif) offset -= dif;
-  offset %= max(dif,1);
-  
+//UPDATE_AND_RENDER_THE_GAME//
   update(delta);
   
-//DRAW_BUFFER_TO_FRAME//
+//RENDER_BUFFER_TO_FRAME//
   scalingShader.set("radius", swirlRadius);
   scalingShader.set("angle", swirlAngle);
   //scalingShader.set("time", float(millis())/10000);
@@ -161,8 +165,8 @@ void draw() {
   //text(hex(dif) + "\n" + hex(offset), 10, 14);
   
 //DISPLAY_LOG//
-  log.update(delta);
-  log.display();
+  if(VERBOSE) log.update(delta);
+  if(VERBOSE) log.display();
   
 }
 

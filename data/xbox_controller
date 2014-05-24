@@ -1,0 +1,5 @@
+player 1
+X	x	3	SLIDER	x	0	1.0	0.0
+Y	y	3	SLIDER	y	0	1.0	0.0
+JUMP	jump	1	BUTTON	A	0	0.0	0.0
+START	start/menu	1	BUTTON	Unknown	0	0.0	0.0
