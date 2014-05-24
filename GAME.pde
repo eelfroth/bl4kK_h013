@@ -1,12 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////
+final float ORB_SPAWN_TIME = 3f;
 
 //GAME_VARIABLES//
-ArrayList<Orb> orbs;
+//ArrayList<Orb> orbs;
+int orb_number, max_orb_number, last_spawned;
+float orb_spawn_timer;
+
+BLACK_HOLE black_hole;
+ORB orb;
+ORB[] orbs;
+PLAYER player;
 
 void initialize(int start_millis) {
           if(VERBOSE) log.add_line("INITIALIZE_START_AT: \t" + start_millis + " ms");
   
-  orbs = new ArrayList<Orb>();
+  /*orbs = new ArrayList<Orb>();
           if(VERBOSE) log.add_line("NEW_ARRAY_LIST: \t\tORBS");
   
   //orbs.add(createOrb(23, BUFFER_WIDTH/2, BUFFER_HEIGHT/2));
@@ -24,7 +32,17 @@ void initialize(int start_millis) {
           if(VERBOSE) log.add_line("INITIALIZE_RUNTIME: \t" + (millis()-start_millis) + " ms");
           if(VERBOSE) log.add_line();
           
+  */
   
+  black_hole = new BLACK_HOLE();
+  orb = new ORB(10);
+  player = new PLAYER();
+  max_orb_number = ceil(orb.time_to_center / ORB_SPAWN_TIME) + 1;
+  orbs = new ORB[max_orb_number];
+  orbs[0] = orb;
+  orb_number = 1;
+  last_spawned = 0;
+  orb_spawn_timer = 0f;
           
   last_millis = millis();
 }
@@ -47,7 +65,7 @@ void update(float delta) {
     buffer.translate(buffer.width/2, buffer.height/2);
     //buffer.rotate(float(millis())/10000);
     buffer.tint(255, 0);
-    bgShader.set("time", -float(millis()) / 100.0);
+    bgShader.set("time", -float(millis()) / 50.0);
     bgShader.set("modulo", 3.0F);
     buffer.shader(bgShader);
     buffer.imageMode(CENTER);
@@ -58,10 +76,62 @@ void update(float delta) {
     buffer.noStroke();
     //buffer.rect(0, 0, buffer.width, buffer.height);
     
-    for(Orb orb : orbs) {
+    
+    orb_spawn_timer++;
+  
+  if(orb_spawn_timer > ORB_SPAWN_TIME * GAME_SPEED) {
+    
+    if(orb_number < max_orb_number) {
+    
+      orb_spawn_timer = 0f;
+      orbs[orb_number] = new ORB(10);
+      last_spawned = orb_number;
+      orb_number++;
+   
+    }
+    else {
+     
+      for(int i = 0; i < orb_number; i++) {
+        
+        if(!orbs[i].alive) {
+         
+          orbs[i].spawn();
+          last_spawned = i;
+          break;
+         
+        } 
+        
+      }
+     
+    } 
+    
+  }
+  
+  //background(BACKGROUND_COLOR);
+ // black_hole.display();
+  
+  for(int i = 0; i < orb_number; i++) {
+    
+    if(orbs[i].alive) {
+     
+      orbs[i].update();
+      orbs[i].display();
+     
+    } 
+    
+  }
+  
+  if(player.alive) {
+    
+    player.update();
+    player.display();
+   
+  } 
+    
+   /* for(Orb orb : orbs) {
       orb.update(delta);
       orb.display();
-    }
+    }*/
     //buffer.resetShader();
     
     //buffer.shader(bgShader);

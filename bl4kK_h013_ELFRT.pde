@@ -20,7 +20,7 @@ final int FRAME_WIDTH = 800;
 final int FRAME_HEIGHT = 600;
 final int WINDOW_WIDTH = 800;//1100;
 final int WINDOW_HEIGHT = 600;//730;
-final int GAME_SPEED = 60;
+final int GAME_SPEED = 30;
 final boolean VERBOSE = false;
 final int BUFFER_OPACITY = 200;
 
@@ -198,7 +198,7 @@ void draw() {
 
 ////////////////////////////////////////////////////////////////////////////
 
-void keyPressed() {
+/*void keyPressed() {
   if(key == CODED) {
     if(keyCode == KeyEvent.VK_F12) {
       initialize(millis());
@@ -207,7 +207,73 @@ void keyPressed() {
       setup();
     }
   } 
+}*/
+void keyPressed() {
+  if(player.alive) {
+  
+    if(key == CODED) {
+      
+      if(keyCode == UP && player.attached && player.ready_to_jump) {
+       
+       player.jump();
+       
+      }
+      else if(keyCode == RIGHT) {
+       
+        player.right_down = true;
+       
+      }
+      else if(keyCode == LEFT) {
+       
+        player.left_down = true;
+       
+      } 
+      
+    }
+  
+  }
+  else {
+   
+    if(key == CODED && keyCode == UP) {
+      
+      if(orbs[last_spawned].alive && !orbs[last_spawned].attached) {
+      
+        player.spawn();
+        player.attach_to_orb(orbs[last_spawned]);
+      
+      }
+     
+    } 
+    
+  }
 }
 
+void keyReleased() {
+  
+  if(player.alive) {
+  
+    if(key == CODED) {
+      
+      if(keyCode == UP) {
+       
+        player.ready_to_jump = true;
+       
+      }
+      else if(keyCode == RIGHT) {
+       
+        player.right_down = false;
+       
+      }
+      else if(keyCode == LEFT) {
+       
+        player.left_down = false;
+       
+      } 
+      
+    }
+  
+  }
+  
+}
 
 ////////////////////////////////////////////////////////////////////////////
