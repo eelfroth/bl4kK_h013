@@ -68,7 +68,8 @@ class PLAYER {
       
       if(jump_orbit_radius == 0f || jump_orbit_radius > black_hole.RADIUS+23) {
         
-        alive = false; 
+        alive = false;
+       s_die.play(0); 
         
       }
       
@@ -94,7 +95,10 @@ class PLAYER {
     attached = true;
     attached_orb = orb;
     attached_orb.attached = true;
-    if(orb.identificator != ' ')score += orb.identificator;
+    if(orb.identificator != ' '){
+      score += orb.identificator;
+      s_jump.play(0);
+    }
     orb.identificator = ' ';
     
     if(angle_set) {
@@ -107,6 +111,8 @@ class PLAYER {
       orbit_angle = random(TAU);
       
     }
+    
+    
    
   }
  
@@ -120,6 +126,8 @@ class PLAYER {
     jump_orbit_radius = dist(location.x, location.y, black_hole.location.x, black_hole.location.y);
     jump_orbit_angle = atan2(location.y - black_hole.location.y, location.x - black_hole.location.x);
     player.ready_to_jump = false;
+    
+    s_land.play(0);
   }
  
   void spawn() {

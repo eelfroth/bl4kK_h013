@@ -1,3 +1,10 @@
+import ddf.minim.spi.*;
+import ddf.minim.signals.*;
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.ugens.*;
+import ddf.minim.effects.*;
+
 import org.gamecontrolplus.gui.*;
 import org.gamecontrolplus.*;
 import net.java.games.input.*;
@@ -46,6 +53,9 @@ final float swirlAngle = 1;
 ControlIO control;
 Configuration config;
 ControlDevice gpad;
+
+Minim minim;
+AudioPlayer OST, s_jump, s_land, s_die, s_jingle;
 
 
 void setup() { 
@@ -140,6 +150,13 @@ void setup() {
     println("No suitable device configured");
     System.exit(-1); // End the program NOW!
   }
+  minim = new Minim(this);
+  OST = minim.loadFile("black hole.mp3");
+  OST.loop();
+  s_jump  = minim.loadFile("jump off.wav");
+  s_die = minim.loadFile("Suckin.wav");
+  s_land = minim.loadFile("landon.wav");
+  s_jingle = minim.loadFile("jingle.wav");
   
 //FINISH_SETUP//
           if(VERBOSE) log.add_line("SETUP_DONE_AT: \t" + millis() + " ms");
@@ -311,6 +328,7 @@ void getGpad() {
         player.ready_to_jump = false;
         orb_iterator++;
         score = "";
+        s_jingle.play(0);
       }
   }
 }
