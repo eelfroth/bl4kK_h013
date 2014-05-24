@@ -4,7 +4,7 @@ class PLAYER {
   
   final float orbit_time = 1f;
   final float jump_velocity = 10f;
-  final float center_gravity = 0.01f;
+  final float center_gravity = 0.005f;
   final float orbit_gravity = 0f;//0.001f;
   final float collision_range = 3f;
   
@@ -41,7 +41,6 @@ class PLAYER {
       
       location.x = orbit_radius * cos(orbit_angle) + attached_orb.location.x;
       location.y = orbit_radius * sin(orbit_angle) + attached_orb.location.y;
-    
     }
     else {
       
@@ -95,6 +94,8 @@ class PLAYER {
     attached = true;
     attached_orb = orb;
     attached_orb.attached = true;
+    if(orb.identificator != ' ')score += orb.identificator;
+    orb.identificator = ' ';
     
     if(angle_set) {
       
@@ -118,7 +119,7 @@ class PLAYER {
     jump_orbit_velocity_radians = (jump_orbit_velocity_pixels * TAU) / (black_hole.RADIUS * TAU);
     jump_orbit_radius = dist(location.x, location.y, black_hole.location.x, black_hole.location.y);
     jump_orbit_angle = atan2(location.y - black_hole.location.y, location.x - black_hole.location.x);
-   
+    player.ready_to_jump = false;
   }
  
   void spawn() {

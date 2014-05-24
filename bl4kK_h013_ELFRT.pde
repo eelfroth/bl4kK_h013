@@ -43,6 +43,10 @@ int dif;
 float swirlRadius = BUFFER_HEIGHT/2;
 final float swirlAngle = 1;
 
+ControlIO control;
+Configuration config;
+ControlDevice gpad;
+
 
 void setup() { 
 //SET_UP_FRAME// 
@@ -130,6 +134,12 @@ void setup() {
   dif = (WINDOW_WIDTH*WINDOW_HEIGHT) - (BUFFER_WIDTH*BUFFER_HEIGHT);
   bg_image = loadImage("bg_image.png");
   vignette = loadImage("vignette.png");
+  control = ControlIO.getInstance(this);
+  gpad = control.getMatchedDevice("xbox_controller");
+  if (gpad == null) {
+    println("No suitable device configured");
+    System.exit(-1); // End the program NOW!
+  }
   
 //FINISH_SETUP//
           if(VERBOSE) log.add_line("SETUP_DONE_AT: \t" + millis() + " ms");
@@ -145,6 +155,7 @@ void setup() {
 
 
 void draw() {
+  getGpad();
 //GET_DELTA_TIME//
   delta = float(millis() - last_millis)/1000 * GAME_SPEED;
   last_millis = millis();
@@ -185,10 +196,13 @@ void draw() {
 //SHOW_ME_THE_RATES//
   fill(0);
   stroke(color(23, 100, 200));
-  rect(text_size * 0.5, text_size * 0.5, text_size * 10, text_size * 2.64);
+  //rect(text_size * 0.5, text_size * 0.5, text_size * 10, text_size * 2.64);
   fill(color(23, 100, 200));
-  text("fR: " + frameRate + " \n∆t: " + delta, 10, max(ceil(float(WINDOW_HEIGHT)/36), text_size));
+  //text("BLACK_HOLE BY BEN_SIRONKO AND EELFROTH\nfR: " + frameRate/* + " \n∆t: " + delta*/, 10, max(ceil(float(WINDOW_HEIGHT)/36), text_size));
+  text("GAME BY BEN_SIRONKO AND EELFROTH                  SFX AND OST BY FELIX_VON_DOHLEN AND BILI_RUBIN", 10, WINDOW_HEIGHT-14);
   //text(hex(dif) + "\n" + hex(offset), 10, 14);
+    text("SCORE = " + score, 10, max(ceil(float(WINDOW_HEIGHT)/36), text_size));
+
   
 //DISPLAY_LOG//
   if(VERBOSE) log.update(delta);
@@ -274,6 +288,31 @@ void keyReleased() {
   
   }
   
+}
+
+void getGpad() {
+  if(player.alive) {
+    if(gpad.getButton("JUMP").pressed()) {
+      if(player.attached && player.ready_to_jump) player.jump();
+    }
+    else {
+      player.ready_to_jump = true;
+    }
+    if(gpad.getSlider("X").getValue() > 0.1) player.right_down = true;
+    else player.right_down = false;
+    if(gpad.getSlider("X").getValue() < -0.1) player.left_down = true;
+    else player.left_down = false;
+  }
+  else if (gpad.getButton("JUMP").pressed()) {
+    if(orbs[last_spawned].alive && !orbs[last_spawned].attached) {
+      
+        player.spawn();
+        player.attach_to_orb(orbs[last_spawned]);
+        player.ready_to_jump = false;
+        orb_iterator++;
+        score = "";
+      }
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////

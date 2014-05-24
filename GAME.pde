@@ -12,6 +12,8 @@ ORB orb;
 ORB[] orbs;
 PLAYER player;
 
+String score = "";
+
 void initialize(int start_millis) {
           if(VERBOSE) log.add_line("INITIALIZE_START_AT: \t" + start_millis + " ms");
   
@@ -128,6 +130,28 @@ void update(float delta) {
     player.display();
    
   } 
+  else {
+    orb_iterator = 31;
+    
+    pushStyle();
+    textFont(font_orb);
+    textAlign(CENTER);
+    textSize(100);
+    fill(color(23, 100, 200));
+    text("BLACK_HOLE", WINDOW_WIDTH/2-1+random(2), WINDOW_HEIGHT/3-1+random(2));
+    fill(color(0, 200+random(55)));
+    text("BLACK_HOLE", WINDOW_WIDTH/2, WINDOW_HEIGHT/3);
+    fill(color(23, 100, 200));
+    textSize(24);
+    if(score == "") text("NO_GLYPHS_COLLECTED", WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+    else {
+      fill(color(23, 100, 200));
+      text("GLYPHS_COLLECTED:", WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+      textSize(48);
+      text(score, WINDOW_WIDTH/2, WINDOW_HEIGHT/2+48);
+    }
+    popStyle();
+  }
     
    /* for(Orb orb : orbs) {
       orb.update(delta);
