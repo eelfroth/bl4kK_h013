@@ -20,7 +20,7 @@ final int FRAME_WIDTH = 800;
 final int FRAME_HEIGHT = 600;
 final int WINDOW_WIDTH = 800;//1100;
 final int WINDOW_HEIGHT = 600;//730;
-final int GAME_SPEED = 30;
+final int GAME_SPEED = 40;
 final boolean VERBOSE = false;
 final int BUFFER_OPACITY = 200;
 
@@ -168,7 +168,7 @@ void draw() {
     framebuffer.translate(framebuffer.width/2, framebuffer.height/2);
     framebuffer.rotate(-float(millis())/1000);
     framebuffer.imageMode(CENTER);
-    framebuffer.tint(255, 200);
+    framebuffer.tint(255, 128);
     framebuffer.image(vignette, 0, 0, framebuffer.width*2, framebuffer.height*2);
     //framebuffer.image(vignette, 0, 0, framebuffer.width, framebuffer.height);
     framebuffer.imageMode(CORNER);

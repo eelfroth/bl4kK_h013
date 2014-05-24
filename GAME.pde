@@ -1,5 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 final float ORB_SPAWN_TIME = 3f;
+final float START_RADIUS = 20;
 
 //GAME_VARIABLES//
 //ArrayList<Orb> orbs;
@@ -35,7 +36,7 @@ void initialize(int start_millis) {
   */
   
   black_hole = new BLACK_HOLE();
-  orb = new ORB(10);
+  orb = new ORB(START_RADIUS);
   player = new PLAYER();
   max_orb_number = ceil(orb.time_to_center / ORB_SPAWN_TIME) + 1;
   orbs = new ORB[max_orb_number];
@@ -84,7 +85,7 @@ void update(float delta) {
     if(orb_number < max_orb_number) {
     
       orb_spawn_timer = 0f;
-      orbs[orb_number] = new ORB(10);
+      orbs[orb_number] = new ORB(START_RADIUS);
       last_spawned = orb_number;
       orb_number++;
    
@@ -113,7 +114,7 @@ void update(float delta) {
   for(int i = 0; i < orb_number; i++) {
     
     if(orbs[i].alive) {
-     
+       
       orbs[i].update();
       orbs[i].display();
      

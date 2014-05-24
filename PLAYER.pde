@@ -6,7 +6,7 @@ class PLAYER {
   final float jump_velocity = 10f;
   final float center_gravity = 0.01f;
   final float orbit_gravity = 0f;//0.001f;
-  final float collision_range = 10f;
+  final float collision_range = 3f;
   
   float orbit_radius, orbit_angle, orbit_velocity, jump_orbit_radius, jump_orbit_angle, jump_orbit_velocity_pixels, jump_orbit_velocity_radians, center_velocity;
   
@@ -56,7 +56,7 @@ class PLAYER {
        
         if(orbs[i].alive) {
          
-          if(dist(location.x, location.y, orbs[i].location.x, orbs[i].location.y) <= collision_range) {
+          if(dist(location.x, location.y, orbs[i].location.x, orbs[i].location.y) <= collision_range+ orbs[i].radius) {
             
             attach_to_orb(orbs[i]);
             break; 
@@ -78,10 +78,10 @@ class PLAYER {
   }
  
   void display() {
-   
+    
+    buffer.pushMatrix();
     buffer.stroke(255);
     buffer.fill(0, 200);
-    buffer.pushMatrix();
     buffer.translate(location.x, location.y);
     buffer.rotate(orbit_angle);
     buffer.rect(-SIZE / 2, - SIZE / 2, SIZE, SIZE);

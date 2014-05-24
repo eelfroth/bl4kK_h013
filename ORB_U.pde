@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 
-int orb_iterator = 16;
+int orb_iterator = 30;
 
 /*Orb createOrb(float radius, float x, float y) {
   Orb orb = new Orb(radius, x, y);

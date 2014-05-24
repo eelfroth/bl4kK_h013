@@ -20,13 +20,7 @@ class ORB {
  
   ORB(float radius) {
     this.radius = radius;
-    //NEXT_GLYPH//
-  identificator = char(++orb_iterator);
-  
-//ONLY_USE_GLYPHS_THAT_ARE_IN_THE_FONT//
-  while(font_orb.getGlyph(identificator) == null) {
-    identificator = char(++orb_iterator);
-  }
+    
     
    
     location = new PVector();
@@ -40,8 +34,8 @@ class ORB {
     rotation = 0.05;
     //identificator = '※';
     c_fill = color(0, 200);
-    c_stroke = color(23, 70, 200);
-    c_symbol = color(23, 50, 250);
+    c_stroke = color(23, 70, 220);
+    c_symbol = color(23, 50, 255);
    
   }
  
@@ -89,7 +83,7 @@ class ORB {
     buffer.translate(location.x, location.y);
     buffer.rotate(orientation);
     buffer.textFont(font_orb);
-    {
+    
       buffer.stroke(c_stroke);
       buffer.fill(c_fill);
       buffer.strokeWeight(1);
@@ -101,19 +95,32 @@ class ORB {
       buffer.textAlign(CENTER);
       buffer.textSize(radius*2);
       buffer.text(identificator, 0, 0 + radius/1.5);
-      buffer.text(identificator, 0, 0 + radius/1.5);
-    }
+     // buffer.text(identificator, 0, 0 + radius/1.5);
+    
     buffer.popMatrix();
-   
+    buffer.fill(255, 32);
+   // buffer.ellipse(location.x+10, location.y+10, radius*2, radius*2);
+   print(identificator);
   } 
   
   void spawn() {
+    
+    //NEXT_GLYPH//
+  identificator = char(++orb_iterator);
+  
+//ONLY_USE_GLYPHS_THAT_ARE_IN_THE_FONT//
+  while(font_orb.getGlyph(identificator) == null) {
+    identificator = char(++orb_iterator);
+  }
    
     alive = true;
     orbit_radius = base_orbit_radius;
     center_velocity = 0f; 
     orbit_angle = random(TAU);
+    orientation = random(TWO_PI);
     
+    
+    println("\nspawn("+identificator + ")");
   }
   
 }
