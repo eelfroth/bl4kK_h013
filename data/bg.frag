@@ -38,7 +38,7 @@ float mod(float a, float b) {
 }
 
 void main() {
-	vec2 uv = swirl(vertTexCoord.st, time/5000.0);
+	vec2 uv = swirl(vertTexCoord.st, time/50.0);
 //	vec2 uv = vertTexCoord.st;
 //	vec2 texSize = vec2(rt_w, rt_h);
 	vec4 color = vertColor;

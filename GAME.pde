@@ -47,7 +47,7 @@ void update(float delta) {
     buffer.translate(buffer.width/2, buffer.height/2);
     //buffer.rotate(float(millis())/10000);
     buffer.tint(255, 0);
-    bgShader.set("time", -float(millis()));
+    bgShader.set("time", -float(millis()) / 100.0);
     bgShader.set("modulo", 3.0F);
     buffer.shader(bgShader);
     buffer.imageMode(CENTER);
@@ -62,6 +62,11 @@ void update(float delta) {
       orb.update(delta);
       orb.display();
     }
+    //buffer.resetShader();
+    
+    //buffer.shader(bgShader);
+    
+    
     //buffer.resetShader();
   }
   buffer.endDraw();

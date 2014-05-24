@@ -37,11 +37,14 @@ class Orb {
     c_fill = color(0, 160);
     c_stroke = color(23, 100, 200);
     c_symbol = color(23, 100, 200);
+    c_stroke = color(23, 70, 200);
+    c_symbol = color(23, 50, 250);
   }
   
   void update(float delta) {
     orientation += rotation * delta;
     velocity.add(0.25 - random(0.5),0.25 - random(0.5), 0);
+    velocity.mult(0.9);
     location.add(PVector.mult(velocity, delta));
   }
   

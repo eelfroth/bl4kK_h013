@@ -16,6 +16,8 @@ final String CREATION_DATE = "PUNGENDAY\t\t70TH_OF_DISCORD\t\tYOLD_3180";
 //PREFERENCES//
 final int BUFFER_WIDTH = 320;
 final int BUFFER_HEIGHT = 320;
+final int FRAME_WIDTH = 800;
+final int FRAME_HEIGHT = 600;
 final int WINDOW_WIDTH = 800;//1100;
 final int WINDOW_HEIGHT = 600;//730;
 final int GAME_SPEED = 60;
@@ -25,15 +27,15 @@ final int BUFFER_OPACITY = 200;
 ////////////////////////////////////////////////////////////////////////////
 
 //SKETCH_VARIABLES//
-PGraphics buffer;
+PGraphics buffer, framebuffer;
 color buffer_tint;
 float delta;
 int last_millis;
 MLog log;
 PFont font_log, font_orb; 
 float text_size;
-PShader scalingShader, whirlShader, bgShader;
-PImage bg_image;
+PShader scalingShader, swirlShader, bgShader;
+PImage bg_image, vignette;
 
 //SHADER_VARIABLES//
 int offset = 2;
@@ -66,6 +68,7 @@ void setup() {
 //SET_UP_BUFFER//
   buffer = createGraphics(BUFFER_WIDTH, BUFFER_HEIGHT, P2D);
           if(VERBOSE) log.add_line("BUFFER_SIZE: \t" + BUFFER_WIDTH + "x" + BUFFER_HEIGHT);
+  framebuffer = createGraphics(FRAME_WIDTH, FRAME_HEIGHT, P2D);
           
 //DRAWING_PROPERTIES//
   //buffer.noSmooth();
@@ -103,26 +106,30 @@ void setup() {
   //font_orb = font_log;  
 //LOAD_SHADERS//
           if(VERBOSE) log.add_line("LOAD_SHADER: \tscaling.frag");
-  scalingShader = loadShader("scaling.frag");
-  scalingShader.set("pixelSize", buffer.width / 1.0F, buffer.height / 1.0F); //WINDOW_WIDTH / BUFFER_WIDTH, WINDOW_HEIGHT / BUFFER_HEIGHT);
-  scalingShader.set("pixelOffset", 0.5F / buffer.width, 0.5F / buffer.height);
+  swirlShader = loadShader("swirl.frag");
+  swirlShader.set("pixelSize", buffer.width / 1.0F, buffer.height / 1.0F); //WINDOW_WIDTH / BUFFER_WIDTH, WINDOW_HEIGHT / BUFFER_HEIGHT);
+  swirlShader.set("pixelOffset", 0.5F / buffer.width, 0.5F / buffer.height);
             /*if(VERBOSE) log.add_line("LOAD_SHADER: \twhirl.frag, whirl.vert");
   whirlShader = loadShader("whirl.frag");
   whirlShader.set("resolution", float(buffer.width), float(buffer.height));
   whirlShader.set("time", 0.0F);*/
-  scalingShader.set("texSize", float(buffer.width), float(buffer.height));
-  scalingShader.set("radius", swirlRadius);
-  scalingShader.set("angle", swirlAngle);
-  scalingShader.set("center", float(buffer.width)/2, float(buffer.height)/2);
-  scalingShader.set("time", 0.0F);
+  swirlShader.set("texSize", float(buffer.width), float(buffer.height));
+  swirlShader.set("radius", swirlRadius);
+  swirlShader.set("angle", swirlAngle);
+  swirlShader.set("center", float(buffer.width)/2, float(buffer.height)/2);
+  swirlShader.set("time", 0.0F);
           if(VERBOSE) log.add_line("LOAD_SHADER: \tbg.frag");
   bgShader = loadShader("bg.frag");
   bgShader.set("texSize", float(buffer.width), float(buffer.height));
   bgShader.set("time", 0.0F);
+  scalingShader = loadShader("scaling.frag");
+  scalingShader.set("pixelSize", buffer.width / 1.0F, buffer.height / 1.0F); //WINDOW_WIDTH / BUFFER_WIDTH, WINDOW_HEIGHT / BUFFER_HEIGHT);
+  scalingShader.set("pixelOffset", 0.5F / buffer.width, 0.5F / buffer.height);
   
 //HACKY STUFF//
   dif = (WINDOW_WIDTH*WINDOW_HEIGHT) - (BUFFER_WIDTH*BUFFER_HEIGHT);
   bg_image = loadImage("bg_image.png");
+  vignette = loadImage("vignette.png");
   
 //FINISH_SETUP//
           if(VERBOSE) log.add_line("SETUP_DONE_AT: \t" + millis() + " ms");
@@ -145,16 +152,35 @@ void draw() {
 //UPDATE_AND_RENDER_THE_GAME//
   update(delta);
   
-//RENDER_BUFFER_TO_FRAME//
-  scalingShader.set("radius", swirlRadius);
-  scalingShader.set("angle", swirlAngle);
-  //scalingShader.set("time", float(millis())/10000);
+//RENDER_BUFFER_TO_FRAMEBUFFER//
+  swirlShader.set("radius", swirlRadius);
+  swirlShader.set("angle", swirlAngle);
+  //swirlShader.set("time", float(millis())/10000);
+  framebuffer.beginDraw();
+  framebuffer.shader(swirlShader);
+  framebuffer.tint(buffer_tint);
+  framebuffer.image(buffer, 0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+  //framebuffer.text("fR: " + frameRate + " \n∆t: " + delta, 10, max(ceil(float(WINDOW_HEIGHT)/36), text_size));
+  framebuffer.resetShader();
+  
+  framebuffer.shader(scalingShader);
+  framebuffer.pushMatrix();
+    framebuffer.translate(framebuffer.width/2, framebuffer.height/2);
+    framebuffer.rotate(-float(millis())/1000);
+    framebuffer.imageMode(CENTER);
+    framebuffer.tint(255, 200);
+    framebuffer.image(vignette, 0, 0, framebuffer.width*2, framebuffer.height*2);
+    //framebuffer.image(vignette, 0, 0, framebuffer.width, framebuffer.height);
+    framebuffer.imageMode(CORNER);
+    framebuffer.popMatrix();
+  
+  framebuffer.endDraw();
+  
+  //&:THEN_TO_THE_WINDOW//
   shader(scalingShader);
-  {
-    tint(buffer_tint);
-    image(buffer, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-  }
+  image(framebuffer, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
   resetShader();
+  
  
 //SHOW_ME_THE_RATES//
   fill(0);
