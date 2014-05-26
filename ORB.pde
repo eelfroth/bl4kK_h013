@@ -68,6 +68,8 @@ class ORB {
        
         attached = false;
         player.alive = false;
+        
+       s_die.play(0); 
        
       } 
       

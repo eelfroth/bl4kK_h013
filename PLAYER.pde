@@ -4,7 +4,7 @@ class PLAYER {
   
   final float orbit_time = 1f;
   final float jump_velocity = 10f;
-  final float center_gravity = 0.005f;
+  final float center_gravity = 0.05f;
   final float orbit_gravity = 0f;//0.001f;
   final float collision_range = 3f;
   
@@ -66,7 +66,7 @@ class PLAYER {
         
       }
       
-      if(jump_orbit_radius == 0f || jump_orbit_radius > black_hole.RADIUS+23) {
+      if(jump_orbit_radius == 0f) {
         
         alive = false;
        s_die.play(0); 

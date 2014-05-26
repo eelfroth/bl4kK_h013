@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 final float ORB_SPAWN_TIME = 3f;
-final float START_RADIUS = 20;
+final float START_RADIUS = 15;
 
 //GAME_VARIABLES//
 //ArrayList<Orb> orbs;
