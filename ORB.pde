@@ -45,8 +45,8 @@ class ORB {
     
     if(orbit_time > 0f) {
     
-      orbit_velocity = TAU / (orbit_time * GAME_SPEED);
-      orbit_angle += orbit_velocity * delta;
+      orbit_velocity = TAU / (orbit_time * GAME_SPEED) * delta;
+      orbit_angle += orbit_velocity;
       orbit_radius = max(0f, orbit_radius - center_velocity);
       center_velocity += center_gravity * delta;
       
@@ -66,16 +66,16 @@ class ORB {
     
       if(attached) {
        
-        attached = false;
+         attached = false;
         player.alive = false;
-        
        s_die.play(0); 
+      player_spawn_timer = PLAYER_SPAWN_TIME;
        
       } 
       
     }
    rotation = -1/orbit_radius;
-     orientation += rotation * delta;
+     orientation += rotation;
      
   }
  

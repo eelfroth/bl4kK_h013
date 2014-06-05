@@ -27,7 +27,7 @@ final int FRAME_WIDTH = 640;
 final int FRAME_HEIGHT = 640;
 final int WINDOW_WIDTH = 640;//1100;
 final int WINDOW_HEIGHT = 640;//730;
-final int GAME_SPEED = 40;
+final int GAME_SPEED = 30;
 final boolean VERBOSE = false;
 final int BUFFER_OPACITY = 200;
 
@@ -300,7 +300,7 @@ void getGpad() {
     else player.right_down = false;
     if (gpad.getSlider("X").getValue() < -0.1) player.left_down = true;
     else player.left_down = false;
-  } else if (gpad.getButton("JUMP").pressed()) {
+  } else if (gpad.getButton("JUMP").pressed() && player_spawn_timer <= 0) {
     if (orbs[last_spawned].alive && !orbs[last_spawned].attached) {
 
       player.spawn();
@@ -314,4 +314,4 @@ void getGpad() {
 }
 
 ////////////////////////////////////////////////////////////////////////////
-
+ 

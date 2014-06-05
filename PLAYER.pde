@@ -1,6 +1,6 @@
 class PLAYER {
   
-  final int SIZE = 6;
+  final int SIZE = 10;
   
   final float orbit_time = 1f;
   final float jump_velocity = 10f;
@@ -70,7 +70,8 @@ class PLAYER {
       if(jump_orbit_radius == 0f) {
         
         alive = false;
-       s_die.play(0); 
+       s_die.play(0);
+      player_spawn_timer = PLAYER_SPAWN_TIME; 
         
       }
       
@@ -81,8 +82,10 @@ class PLAYER {
   void display() {
     
     buffer.pushMatrix();
+    buffer.colorMode(HSB, 255);
     buffer.stroke(255);
-    buffer.fill(0, 200);
+    buffer.fill(random(255), random(255));
+    //buffer.fill(0, 200);
     buffer.translate(location.x, location.y);
     buffer.rotate(orbit_angle);
     buffer.rect(-SIZE / 2, - SIZE / 2, SIZE, SIZE);

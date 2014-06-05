@@ -1,11 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////
 final float ORB_SPAWN_TIME = 3f;
 final float START_RADIUS = 15;
+final float PLAYER_SPAWN_TIME = 30f;
 
 //GAME_VARIABLES//
 //ArrayList<Orb> orbs;
 int orb_number, max_orb_number, last_spawned;
-float orb_spawn_timer;
+float orb_spawn_timer, player_spawn_timer;
 
 BLACK_HOLE black_hole;
 ORB orb;
@@ -46,6 +47,7 @@ void initialize(int start_millis) {
   orb_number = 1;
   last_spawned = 0;
   orb_spawn_timer = 0f;
+  player_spawn_timer = 0f;
           
   last_millis = millis();
 }
@@ -79,8 +81,9 @@ void update(float delta) {
     buffer.noStroke();
     //buffer.rect(0, 0, buffer.width, buffer.height);
     
+    //buffer.shader(swirlShader);
     
-    orb_spawn_timer++;
+    orb_spawn_timer+= delta;
   
   if(orb_spawn_timer > ORB_SPAWN_TIME * GAME_SPEED) {
     
@@ -132,6 +135,7 @@ void update(float delta) {
   } 
   else {
     orb_iterator = 31;
+    player_spawn_timer -= delta;
     
     pushStyle();
     textFont(font_orb);
