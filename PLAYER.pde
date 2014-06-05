@@ -4,7 +4,7 @@ class PLAYER {
   
   final float orbit_time = 1f;
   final float jump_velocity = 10f;
-  final float center_gravity = 0.05f;
+  final float center_gravity = 0.1f;
   final float orbit_gravity = 0f;//0.001f;
   final float collision_range = 3f;
   
@@ -30,12 +30,12 @@ class PLAYER {
     
       if(right_down) {
         
-        orbit_angle += orbit_velocity; 
+        orbit_angle += orbit_velocity * delta; 
         
       }
       else if(left_down) {
         
-        orbit_angle -= orbit_velocity; 
+        orbit_angle -= orbit_velocity * delta; 
         
       }
       
@@ -44,10 +44,11 @@ class PLAYER {
     }
     else {
       
-      jump_orbit_angle += jump_orbit_velocity_radians;
-      jump_orbit_velocity_radians += orbit_gravity;
+      jump_orbit_angle += jump_orbit_velocity_radians * delta;
+      jump_orbit_velocity_radians += orbit_gravity * delta;
       jump_orbit_radius = max(0, jump_orbit_radius + center_velocity);
-      center_velocity -= center_gravity;
+      center_velocity -= center_gravity * delta;
+      if(jump_orbit_radius >= black_hole.RADIUS) center_velocity -= center_gravity * 4 * delta;
       location.x = jump_orbit_radius * cos(jump_orbit_angle) + black_hole.location.x;
       location.y = jump_orbit_radius * sin(jump_orbit_angle) + black_hole.location.y;
       

@@ -46,9 +46,9 @@ class ORB {
     if(orbit_time > 0f) {
     
       orbit_velocity = TAU / (orbit_time * GAME_SPEED);
-      orbit_angle += orbit_velocity;
+      orbit_angle += orbit_velocity * delta;
       orbit_radius = max(0f, orbit_radius - center_velocity);
-      center_velocity += center_gravity;
+      center_velocity += center_gravity * delta;
       
     }
     else {
