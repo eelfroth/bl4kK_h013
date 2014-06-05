@@ -25,8 +25,8 @@ final int BUFFER_WIDTH = 320;
 final int BUFFER_HEIGHT = 320;
 final int FRAME_WIDTH = 640;
 final int FRAME_HEIGHT = 640;
-final int WINDOW_WIDTH = 640;//1100;
-final int WINDOW_HEIGHT = 640;//730;
+//final int WINDOW_WIDTH = 640;//1100;
+//final int WINDOW_HEIGHT = 640;//730;
 final int GAME_SPEED = 30;
 final boolean VERBOSE = false;
 final int BUFFER_OPACITY = 200;
@@ -60,7 +60,7 @@ AudioPlayer OST, s_jump, s_land, s_die, s_jingle;
 
 void setup() { 
   //SET_UP_FRAME// 
-  size(WINDOW_WIDTH, WINDOW_HEIGHT, P2D);
+  size(displayHeight, displayHeight, P2D);
   noSmooth();
   colorMode(HSB);
   text_size = 14;//max(ceil(float(WINDOW_HEIGHT)/36), 14);
@@ -77,7 +77,7 @@ void setup() {
 
   int start_millis = millis();
   if (VERBOSE) log.add_line("SETUP_START_AT: " + start_millis + " ms");
-  if (VERBOSE) log.add_line("WINDOW_SIZE: \t" + WINDOW_WIDTH + "x" + WINDOW_HEIGHT);
+  //if (VERBOSE) log.add_line("WINDOW_SIZE: \t" + WINDOW_WIDTH + "x" + WINDOW_HEIGHT);
 
   //SET_UP_BUFFER//
   buffer = createGraphics(BUFFER_WIDTH, BUFFER_HEIGHT, P2D);
@@ -142,7 +142,7 @@ void setup() {
   scalingShader.set("pixelOffset", 0.5F / buffer.width, 0.5F / buffer.height);
 
   //HACKY STUFF//
-  dif = (WINDOW_WIDTH*WINDOW_HEIGHT) - (BUFFER_WIDTH*BUFFER_HEIGHT);
+  dif = 1;//(WINDOW_WIDTH*WINDOW_HEIGHT) - (BUFFER_WIDTH*BUFFER_HEIGHT);
   bg_image = loadImage("bg_image.png");
   vignette = loadImage("vignette.png");
   control = ControlIO.getInstance(this);
@@ -208,7 +208,7 @@ void draw() {
 
   //&:THEN_TO_THE_WINDOW//
   shader(scalingShader);
-  image(framebuffer, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+  image(framebuffer, 0, 0, width, height);
   resetShader();
 
 
@@ -217,10 +217,10 @@ void draw() {
   stroke(color(23, 100, 200));
   //rect(text_size * 0.5, text_size * 0.5, text_size * 10, text_size * 2.64);
   fill(color(23, 100, 200));
-  text("\nfR: " + frameRate/* + " \n∆t: " + delta*/, 10, max(ceil(float(WINDOW_HEIGHT)/36), text_size));
-  text("GAME BY BEN_SIRONKO AND EELFROTH                  SFX AND OST BY FELIX_VON_DOHLEN AND BILI_RUBIN", 10, WINDOW_HEIGHT-14);
+  text("\nfR: " + frameRate/* + " \n∆t: " + delta*/, 10, max(ceil(float(height)/36), text_size));
+  text("GAME BY BEN_SIRONKO AND EELFROTH                  SOUNDTRACK BY BILI_RUBIN; SFX BY NITRO_SPLICER", 10, height-14);
   //text(hex(dif) + "\n" + hex(offset), 10, 14);
-  text("SCORE = " + score, 10, max(ceil(float(WINDOW_HEIGHT)/36), text_size));
+  text("SCORE = " + score, 10, max(ceil(float(height)/36), text_size));
 
 
   //DISPLAY_LOG//

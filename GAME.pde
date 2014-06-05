@@ -143,32 +143,32 @@ void update(float delta) {
     textAlign(CENTER);
     textSize(96);
     fill(color(23, 100, 200, random(255)));
-    text("BLACK_HOLE", WINDOW_WIDTH/2-2+random(4), WINDOW_HEIGHT/3-2+random(4));
+    text("BLACK_HOLE", width/2-2+random(4), height/3-2+random(4));
     fill(color(0, random(255)));
-    text("BLACK_HOLE", WINDOW_WIDTH/2-2+random(4), WINDOW_HEIGHT/3-2+random(4));
+    text("BLACK_HOLE", width/2-2+random(4), height/3-2+random(4));
     fill(color(23, 100, 200));
     textSize(24);
     
     if ((score.length() > highscore.length() || score.equals(highscore)) && score.length() > 0 ) {
       highscore = score;
       fill(color(random(255), random(255), 255));
-      text("NEW_HIGHSCORE:", WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+      text("NEW_HIGHSCORE:", width/2, height/2);
       textSize(48);
-      text(score, WINDOW_WIDTH/2, WINDOW_HEIGHT/2+48);
+      text(score, width/2, height/2+48);
     }
     else {
       if(score == "") {
-        text("NO_GLYPHS_COLLECTED", WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+        text("NO_GLYPHS_COLLECTED", width/2, height/2);
       }
       else {
-        text("GLYPHS_COLLECTED:", WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+        text("GLYPHS_COLLECTED:", width/2, height/2);
         textSize(48);
-        text(score, WINDOW_WIDTH/2, WINDOW_HEIGHT/2+48);
+        text(score, width/2, height/2+48);
       }
       textSize(24);
-      text("HIGHSCORE:", WINDOW_WIDTH/2, WINDOW_HEIGHT/1.5);
+      text("HIGHSCORE:", width/2, height/1.5);
       textSize(48);
-      text(highscore, WINDOW_WIDTH/2, WINDOW_HEIGHT/1.5+48);
+      text(highscore, width/2, height/1.5+48);
     }
     //}
     popStyle();
