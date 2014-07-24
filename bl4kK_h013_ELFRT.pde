@@ -23,8 +23,8 @@ final String CREATION_DATE = "PUNGENDAY\t\t70TH_OF_DISCORD\t\tYOLD_3180";
 //PREFERENCES//
 final int BUFFER_WIDTH = 320;
 final int BUFFER_HEIGHT = 320;
-final int FRAME_WIDTH = 640;
-final int FRAME_HEIGHT = 640;
+final int FRAME_WIDTH = 480;
+final int FRAME_HEIGHT = 480;
 //final int WINDOW_WIDTH = 640;//1100;
 //final int WINDOW_HEIGHT = 640;//730;
 final int GAME_SPEED = 30;
@@ -145,12 +145,12 @@ void setup() {
   dif = 1;//(WINDOW_WIDTH*WINDOW_HEIGHT) - (BUFFER_WIDTH*BUFFER_HEIGHT);
   bg_image = loadImage("bg_image.png");
   vignette = loadImage("vignette.png");
-  control = ControlIO.getInstance(this);
-  gpad = control.getMatchedDevice("xbox_controller");
-  if (gpad == null) {
-    println("No suitable device configured");
-    System.exit(-1); // End the program NOW!
-  }
+  //control = ControlIO.getInstance(this);
+  //gpad = control.getMatchedDevice("xbox_controller");
+  //if (gpad == null) {
+  //  println("No suitable device configured");
+  //  System.exit(-1); // End the program NOW!
+  //}
   minim = new Minim(this);
   OST = minim.loadFile("black hole.mp3");
   OST.setVolume(2);
@@ -174,7 +174,7 @@ void setup() {
 
 
 void draw() {
-  getGpad();
+  //getGpad();
   //GET_DELTA_TIME//
   delta = float(millis() - last_millis)/1000 * GAME_SPEED;
   last_millis = millis();
@@ -264,6 +264,10 @@ void keyPressed() {
 
         player.spawn();
         player.attach_to_orb(orbs[last_spawned]);
+        player.ready_to_jump = false;
+        orb_iterator++;
+      score = "";
+      s_jingle.play(0);
       }
     }
   }
